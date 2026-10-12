@@ -8,6 +8,9 @@ public sealed class AuthEndpoints : IEndpoint
     {
         var group = endpointRouteBuilder.MapGroup("auth").WithTags("Authorization");
 
+        group.MapPost("/login", () => { });
+        group.MapPost("/logout", () => { });
+        group.MapPost("/refresh", () => { });
 
     }
 }
