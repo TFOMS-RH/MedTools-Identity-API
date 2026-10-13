@@ -19,6 +19,11 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
                 "Конфликт данных",
                 exception.Message),
 
+            UserNotFoundException => (
+                StatusCodes.Status404NotFound,
+                "Ресурс не найден",
+                exception.Message),
+
             _ => (
                 StatusCodes.Status500InternalServerError,
                 "Внутренняя ошибка сервера",

@@ -77,4 +77,27 @@ public sealed class UserRepository(
                 BirthDate: user.BirthDate))
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<UserDto> GetUserByIdAsync(
+        Guid userId,
+        CancellationToken cancellationToken)
+    {
+        var dbUser = await dbContext
+            .Set<UserDbEntity>()
+            .FindAsync(
+                [userId], 
+                cancellationToken: cancellationToken) 
+            ?? throw new UserNotFoundException($"Пользователь с Id {userId} не был найден.");
+
+        return new UserDto(
+            Id: dbUser.Id,
+            OrganizationId: dbUser.OrganizationId,
+            UserName: dbUser.UserName,
+            FirstName: dbUser.FirstName,
+            LastName: dbUser.LastName,
+            MiddleName: dbUser.MiddleName,
+            ContactPhone: dbUser.ContactPhone,
+            Email: dbUser.Email,
+            BirthDate: dbUser.BirthDate);
+    }
 }
