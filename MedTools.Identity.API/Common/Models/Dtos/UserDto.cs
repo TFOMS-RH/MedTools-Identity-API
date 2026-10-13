@@ -8,4 +8,4 @@ public sealed record UserDto(
     string? MiddleName,
     string? ContactPhone,
     string? Email,
-    DateOnly? BitrhDate);
+    DateOnly? BirthDate);

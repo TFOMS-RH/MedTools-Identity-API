@@ -73,7 +73,7 @@ public sealed class UserRepository(
                 MiddleName: user.MiddleName,
                 ContactPhone: user.ContactPhone,
                 Email: user.Email,
-                BitrhDate: user.BirthDate))
+                BirthDate: user.BirthDate))
             .ToListAsync(cancellationToken);
     }
 }
