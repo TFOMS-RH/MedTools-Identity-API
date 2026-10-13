@@ -1,5 +1,5 @@
-﻿using MedTools.Identity.API.Endpoints.Handlers.Users;
-using MedTools.Identity.API.Endpoints.Registration;
+﻿using MedTools.Identity.API.Endpoints.Registration;
+using MedTools.Identity.API.Endpoints.Handlers.Users;
 
 namespace MedTools.Identity.API.Endpoints.Groups;
 
@@ -14,7 +14,6 @@ public sealed class UserEndpoints : IEndpoint
         group.MapGet("/{id:guid}", GetUserByIdHandler.HandleAsync).WithName("GetUserById");
         group.MapPatch("/{id}", () => { });
         group.MapPatch("/{id}/status", () => { });
-        group.MapPost("/{id}/reset-password", () => { });
 
     }
 }

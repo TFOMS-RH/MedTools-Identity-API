@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MedTools.Identity.API.Database.Entities;
 using MedTools.Identity.API.Common.Models.Dtos;
 using MedTools.Identity.API.Common.Exceptions.Models;
+using MedTools.Identity.API.Common.Models.Params;
 
 namespace MedTools.Identity.API.Database.Repositories;
 
@@ -99,5 +100,13 @@ public sealed class UserRepository(
             ContactPhone: dbUser.ContactPhone,
             Email: dbUser.Email,
             BirthDate: dbUser.BirthDate);
+    }
+
+    public async Task UpdateUserAsync(
+        Guid userId,
+        UpdateUserParams updateParams,
+        CancellationToken cancellationToken)
+    {
+
     }
 }
