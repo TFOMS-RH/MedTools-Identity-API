@@ -2,6 +2,7 @@ using Serilog;
 
 using MedTools.Identity.API.DependencyInjections;
 using MedTools.Identity.API.Endpoints.Registration;
+using System.Text.Json.Serialization;
 
 namespace MedTools.Identity.API;
 
@@ -19,7 +20,13 @@ public class Program
         var builder = WebApplication.CreateBuilder();
 
         builder.Services.AddDbContextConfiguration(builder.Configuration);
+        builder.Services.AddApplicationRepositories();
         builder.Services.AddMedToolsIdentityServices();
+        builder.Services.ConfigureHttpJsonOptions(options =>
+        {
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
+        
 
         builder.Host.UseSerilog();
 

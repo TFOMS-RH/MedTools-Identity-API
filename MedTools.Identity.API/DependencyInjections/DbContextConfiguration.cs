@@ -2,6 +2,7 @@
 
 using MedTools.Identity.API.Database;
 using MedTools.Identity.API.Options;
+using MedTools.Identity.API.Database.Repositories;
 
 namespace MedTools.Identity.API.DependencyInjections;
 
@@ -19,12 +20,20 @@ public static class DbContextConfiguration
         services.AddDbContext<IdentityDbContext>(options =>
         {
             options.UseSqlServer(
-                databaseOption.ConnectionString, 
+                databaseOption.ConnectionString,
                 options =>
                 {
                     options.CommandTimeout(databaseOption.CommandTimeout);
                 });
         });
+
+        return services;
+    }
+
+    public static IServiceCollection AddApplicationRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<UserRepository>();
+        services.AddScoped<OrganizationRepository>();
 
         return services;
     }
