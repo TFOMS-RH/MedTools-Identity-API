@@ -66,6 +66,7 @@ public sealed class UserRepository(
         return await dbContext
             .Set<UserDbEntity>()
             .Select(user => new UserDto(
+                Id: user.Id,
                 OrganizationId: user.OrganizationId,
                 UserName: user.UserName,
                 FirstName: user.FirstName,

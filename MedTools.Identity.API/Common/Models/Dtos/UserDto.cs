@@ -1,6 +1,7 @@
 ﻿namespace MedTools.Identity.API.Common.Models.Dtos;
 
 public sealed record UserDto(
+    Guid Id,
     Guid OrganizationId,
     string UserName,
     string FirstName,
