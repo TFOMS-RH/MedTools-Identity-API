@@ -1,6 +1,6 @@
-﻿using MedTools.Identity.API.Enums;
+﻿using MedTools.Identity.API.Common.Enums;
 
-namespace MedTools.Identity.API.Models;
+namespace MedTools.Identity.API.Common.Models.Requests;
 
 public sealed record CreateOrganizationRequest(
     string Code,

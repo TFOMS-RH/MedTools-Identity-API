@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using MedTools.Identity.API.Database;
-using MedTools.Identity.API.Options;
 using MedTools.Identity.API.Database.Repositories;
+using MedTools.Identity.API.Common.Options;
 
 namespace MedTools.Identity.API.DependencyInjections;
 

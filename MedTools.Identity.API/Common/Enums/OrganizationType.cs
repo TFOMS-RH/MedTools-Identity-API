@@ -1,4 +1,4 @@
-﻿namespace MedTools.Identity.API.Enums;
+﻿namespace MedTools.Identity.API.Common.Enums;
 
 public enum OrganizationType
 {

@@ -10,7 +10,7 @@ public sealed class UserEndpoints : IEndpoint
         var group = endpointRouteBuilder.MapGroup("users").WithTags("Users");
 
         group.MapPost("/", CreateUserHandler.HandleAsync);
-        group.MapGet("/", () => { });
+        group.MapGet("/", GetUsersHandler.HandleAsync);
         group.MapGet("/{id:guid}", () => { }).WithName("GetUserById");
         group.MapPatch("/{id}", () => { });
         group.MapPatch("/{id}/status", () => { });

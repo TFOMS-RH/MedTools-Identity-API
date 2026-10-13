@@ -1,4 +1,4 @@
-﻿namespace MedTools.Identity.API.Options;
+﻿namespace MedTools.Identity.API.Common.Options;
 
 public sealed class DatabaseOption
 {

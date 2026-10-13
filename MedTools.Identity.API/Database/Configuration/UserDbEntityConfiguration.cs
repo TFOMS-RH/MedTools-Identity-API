@@ -74,6 +74,8 @@ public sealed class UserDbEntityConfiguration : IEntityTypeConfiguration<UserDbE
             .WithMany(role => role.Users)
             .UsingEntity("user_roles");
 
-        builder.HasIndex(user => user.UserName).IsUnique();
+        builder
+            .HasIndex(user => user.UserName)
+            .IsUnique();
     }
 }

@@ -1,5 +1,5 @@
-﻿using MedTools.Identity.API.Models;
-using MedTools.Identity.API.Database.Repositories;
+﻿using MedTools.Identity.API.Database.Repositories;
+using MedTools.Identity.API.Common.Models.Requests;
 
 namespace MedTools.Identity.API.Endpoints.Handlers.Organizations;
 
@@ -37,7 +37,6 @@ public static class CreateOrganizationHandler
         {
             AddError(errors, nameof(request.Code), "Код организации пустой либо содержит только пробелы.");
         }
-
 
         return errors.ToDictionary(
             x => x.Key,

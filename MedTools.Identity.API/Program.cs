@@ -2,7 +2,7 @@ using Serilog;
 
 using MedTools.Identity.API.DependencyInjections;
 using MedTools.Identity.API.Endpoints.Registration;
-using System.Text.Json.Serialization;
+using MedTools.Identity.API.Common.Exceptions.Handlers;
 
 namespace MedTools.Identity.API;
 
@@ -22,11 +22,8 @@ public class Program
         builder.Services.AddDbContextConfiguration(builder.Configuration);
         builder.Services.AddApplicationRepositories();
         builder.Services.AddMedToolsIdentityServices();
-        builder.Services.ConfigureHttpJsonOptions(options =>
-        {
-            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-        });
-        
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddProblemDetails();
 
         builder.Host.UseSerilog();
 
@@ -36,6 +33,8 @@ public class Program
         });
 
         var app = builder.Build();
+
+        app.UseExceptionHandler();
 
         EndpointsProvider.RegisterApplicationEmdpoints(app.MapGroup("/api"));
 

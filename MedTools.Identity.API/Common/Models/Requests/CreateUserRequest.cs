@@ -1,4 +1,4 @@
-﻿namespace MedTools.Identity.API.Models;
+﻿namespace MedTools.Identity.API.Common.Models.Requests;
 
 public sealed record CreateUserRequest(
     string UserName,

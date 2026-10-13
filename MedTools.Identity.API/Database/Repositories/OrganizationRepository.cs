@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
-using MedTools.Identity.API.Enums;
+using MedTools.Identity.API.Common.Enums;
 using MedTools.Identity.API.Database.Entities;
+using MedTools.Identity.API.Common.Exceptions.Models;
 
 namespace MedTools.Identity.API.Database.Repositories;
 
@@ -13,20 +15,28 @@ public sealed class OrganizationRepository(IdentityDbContext dbContext)
         string? name,
         CancellationToken cancellationToken)
     {
-        var organization = new OrganizationDbEntity()
+        try
         {
-            Code = code,
-            Type = type,
-            Name = name
-        };
+            var organization = new OrganizationDbEntity()
+            {
+                Code = code,
+                Type = type,
+                Name = name
+            };
 
-        await dbContext
-            .Set<OrganizationDbEntity>()
-            .AddAsync(organization, cancellationToken);
+            await dbContext
+                .Set<OrganizationDbEntity>()
+                .AddAsync(organization, cancellationToken);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
-        return organization.Id;
+            return organization.Id;
+        }
+        catch (DbUpdateException ex) 
+            when (ex.InnerException is SqlException { Number: 2601 or 2627 })
+        {
+            throw new DuplicateEntityException("Организация с данным кодом уже существует.", ex);
+        }
     }
 
     public async Task<bool> IsExistingOrganziationAsync(Guid organizationId)
