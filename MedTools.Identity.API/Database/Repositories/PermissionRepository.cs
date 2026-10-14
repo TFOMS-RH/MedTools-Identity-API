@@ -54,9 +54,26 @@ public sealed class PermissionRepository(
                 Name: x.Name,
                 Description: x.Description))
             .FirstOrDefaultAsync(
-                cancellationToken: cancellationToken) ?? throw new EntityNotFoundException($"Разрешения с Id {permissionId} не найдено.");
+                cancellationToken: cancellationToken)
+            ?? throw new EntityNotFoundException($"Разрешения с Id {permissionId} не найдено.");
 
         return permission;
 
+    }
+
+    public async Task<IReadOnlyCollection<PermissionDto>> GetPermissionsAsync(
+        CancellationToken cancellationToken)
+    {
+        var permissions = await dbContext
+            .Set<PermissionDbEntity>()
+            .AsNoTracking()
+            .Select(x => new PermissionDto(
+                Id: x.Id,
+                Code: x.Code,
+                Name: x.Name,
+                Description: x.Description))
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return permissions;
     }
 }
