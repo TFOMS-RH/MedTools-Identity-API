@@ -10,7 +10,8 @@ public class OrganizationEndpoints : IEndpoint
         var group = endpointRouteBuilder.MapGroup("/organizations").WithTags("Organizations");
 
         group.MapPost("/", CreateOrganizationHandler.HandleAsync);
-        group.MapGet("/", () => { }).WithName("GetOrganizationById");
+        group.MapGet("/", GetOrganizationsHandler.HandleAsync);
+        group.MapGet("/{id:guid}", () => { }).WithName("GetOrganizationById");
         group.MapPatch("/", () => { });
     }
 }
