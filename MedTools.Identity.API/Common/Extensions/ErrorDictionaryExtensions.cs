@@ -1,6 +1,6 @@
 ﻿namespace MedTools.Identity.API.Common.Extenstions;
 
-public static class ErrorDictionaryExtenstion
+public static class ErrorDictionaryExtensions
 {
     public static Dictionary<string, List<string>> AddError(
         this Dictionary<string, List<string>> errors,

@@ -61,6 +61,4 @@ public static class CreateUserHandler
             x => x.Key,
             x => x.Value.ToArray());
     }
-
-    
 }
