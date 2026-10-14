@@ -88,7 +88,7 @@ public sealed class UserRepository(
             .FindAsync(
                 [userId],
                 cancellationToken: cancellationToken)
-            ?? throw new UserNotFoundException($"Пользователь с Id {userId} не был найден.");
+            ?? throw new EntityNotFoundException($"Пользователь с Id {userId} не был найден.");
 
         return new UserDto(
             Id: dbUser.Id,
@@ -110,7 +110,7 @@ public sealed class UserRepository(
         var user = await dbContext
             .Set<UserDbEntity>()
             .FindAsync(keyValues: [userId], cancellationToken: cancellationToken)
-                ?? throw new UserNotFoundException($"Пользователь с Id {userId} не найден.");
+                ?? throw new EntityNotFoundException($"Пользователь с Id {userId} не найден.");
 
         if (updateParams.FirstName.IsSpecified)
         {
@@ -153,7 +153,7 @@ public sealed class UserRepository(
         var user = await dbContext
             .Set<UserDbEntity>()
             .FindAsync([userId], cancellationToken: cancellationToken)
-                ?? throw new UserNotFoundException($"Пользователь с Id {userId} не найден.");
+                ?? throw new EntityNotFoundException($"Пользователь с Id {userId} не найден.");
 
         user.IsActive = isActive;
 

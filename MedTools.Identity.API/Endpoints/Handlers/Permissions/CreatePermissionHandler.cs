@@ -1,6 +1,6 @@
-﻿using MedTools.Identity.API.Database.Repositories;
+﻿using MedTools.Identity.API.Common.Extensions;
+using MedTools.Identity.API.Database.Repositories;
 using MedTools.Identity.API.Common.Models.Requests;
-using MedTools.Identity.API.Common.Extensions;
 
 namespace MedTools.Identity.API.Endpoints.Handlers.Permissions;
 

@@ -1,8 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
-using MedTools.Identity.API.Common.Exceptions.Models;
 using MedTools.Identity.API.Database.Entities;
+using MedTools.Identity.API.Common.Models.Dtos;
+using MedTools.Identity.API.Common.Exceptions.Models;
 
 namespace MedTools.Identity.API.Database.Repositories;
 
@@ -37,5 +38,25 @@ public sealed class PermissionRepository(
             throw new DuplicateEntityException(
                 "Разрешение с данным code уже существует.", ex);
         }
+    }
+
+    public async Task<PermissionDto> GetPermissionByIdAsync(
+        Guid permissionId,
+        CancellationToken cancellationToken)
+    {
+        var permission = await dbContext
+            .Set<PermissionDbEntity>()
+            .AsNoTracking()
+            .Where(x => x.Id == permissionId)
+            .Select(x => new PermissionDto(
+                Id: x.Id,
+                Code: x.Code,
+                Name: x.Name,
+                Description: x.Description))
+            .FirstOrDefaultAsync(
+                cancellationToken: cancellationToken) ?? throw new EntityNotFoundException($"Разрешения с Id {permissionId} не найдено.");
+
+        return permission;
+
     }
 }

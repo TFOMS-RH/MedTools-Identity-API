@@ -10,6 +10,6 @@ public sealed class PermissionEndpoints : IEndpoint
         var group = endpointRouteBuilder.MapGroup("/permissions").WithTags("Permissions");
 
         group.MapPost("/", CreatePermissionHandler.HandleAsync);
-        group.MapGet("/{id:guid}", () => { }).WithName("GetPermissionById");
+        group.MapGet("/{id:guid}", GetPermissionHandler.HandleAsync).WithName("GetPermissionById");
     }
 }
