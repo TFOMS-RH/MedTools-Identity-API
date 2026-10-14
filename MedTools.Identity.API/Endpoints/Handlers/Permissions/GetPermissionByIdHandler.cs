@@ -2,7 +2,7 @@
 
 namespace MedTools.Identity.API.Endpoints.Handlers.Permissions;
 
-public static class GetPermissionHandler
+public static class GetPermissionByIdHandler
 {
     public static async Task<IResult> HandleAsync(
         Guid id,

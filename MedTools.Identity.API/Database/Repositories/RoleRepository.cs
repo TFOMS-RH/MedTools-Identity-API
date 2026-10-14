@@ -1,4 +1,8 @@
-﻿using MedTools.Identity.API.Database.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+
+using MedTools.Identity.API.Database.Entities;
+using MedTools.Identity.API.Common.Models.Dtos;
+using MedTools.Identity.API.Common.Exceptions.Models;
 
 namespace MedTools.Identity.API.Database.Repositories;
 
@@ -23,5 +27,21 @@ public sealed class RoleRepository(IdentityDbContext dbContext)
             cancellationToken: cancellationToken);
 
         return role.Id;
+    }
+
+    public async Task<RoleDto> GetRoleByIdAsync(
+        Guid roleId,
+        CancellationToken cancellationToken)
+    {
+        var role = await dbContext
+            .Set<RoleDbEntity>()
+            .Where(x => x.Id == roleId)
+            .Select(x => new RoleDto(
+                Id: x.Id,
+                Name: x.Name))
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken)
+                ?? throw new EntityNotFoundException($"Роли с Id {roleId} не найдено.");
+
+        return role;
     }
 }

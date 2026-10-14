@@ -11,6 +11,6 @@ public sealed class PermissionEndpoints : IEndpoint
 
         group.MapPost("/", CreatePermissionHandler.HandleAsync);
         group.MapGet("/", GetPermissionsHandler.HandleAsync);
-        group.MapGet("/{id:guid}", GetPermissionHandler.HandleAsync).WithName("GetPermissionById");
+        group.MapGet("/{id:guid}", GetPermissionByIdHandler.HandleAsync).WithName("GetPermissionById");
     }
 }

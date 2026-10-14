@@ -10,7 +10,7 @@ public sealed class RoleEndpoints : IEndpoint
         var group = endpointRouteBuilder.MapGroup("/roles").WithTags("Roles");
 
         group.MapPost("/", CreateRoleHandler.HandleAsync);
-        group.MapGet("/{id:guid}", () => { }).WithName("GetRoleById");
+        group.MapGet("/{id:guid}", GetRoleByIdHandler.HandleAsync).WithName("GetRoleById");
         group.MapPatch("/{id}", () => { });
         group.MapDelete("/{id}", () => { });
     }
