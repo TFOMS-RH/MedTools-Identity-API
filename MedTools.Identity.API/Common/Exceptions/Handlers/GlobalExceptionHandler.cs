@@ -24,6 +24,11 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
                 "Ресурс не найден",
                 exception.Message),
 
+            BadHttpRequestException ex => (
+                ex.StatusCode,
+                "Неккоректный запрос",
+                ex.Message),
+
             _ => (
                 StatusCodes.Status500InternalServerError,
                 "Внутренняя ошибка сервера",

@@ -144,4 +144,19 @@ public sealed class UserRepository(
 
         await dbContext.SaveChangesAsync(cancellationToken: cancellationToken);
     }
+
+    public async Task UpdateUserStatusAsync(
+        Guid userId,
+        bool isActive,
+        CancellationToken cancellationToken)
+    {
+        var user = await dbContext
+            .Set<UserDbEntity>()
+            .FindAsync([userId], cancellationToken: cancellationToken)
+                ?? throw new UserNotFoundException($"Пользователь с Id {userId} не найден.");
+
+        user.IsActive = isActive;
+
+        await dbContext.SaveChangesAsync(cancellationToken: cancellationToken);
+    }
 }
