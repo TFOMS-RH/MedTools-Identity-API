@@ -35,6 +35,7 @@ public static class DbContextConfiguration
         services.AddScoped<UserRepository>();
         services.AddScoped<OrganizationRepository>();
         services.AddScoped<PermissionRepository>();
+        services.AddScoped<RoleRepository>();
 
         return services;
     }

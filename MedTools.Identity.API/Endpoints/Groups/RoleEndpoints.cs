@@ -1,4 +1,5 @@
-﻿using MedTools.Identity.API.Endpoints.Registration;
+﻿using MedTools.Identity.API.Endpoints.Handlers.Roles;
+using MedTools.Identity.API.Endpoints.Registration;
 
 namespace MedTools.Identity.API.Endpoints.Groups;
 
@@ -8,8 +9,8 @@ public sealed class RoleEndpoints : IEndpoint
     {
         var group = endpointRouteBuilder.MapGroup("/roles").WithTags("Roles");
 
-        group.MapGet("/", () => { });
-        group.MapPost("/", () => { });
+        group.MapPost("/", CreateRoleHandler.HandleAsync);
+        group.MapGet("/{id:guid}", () => { }).WithName("GetRoleById");
         group.MapPatch("/{id}", () => { });
         group.MapDelete("/{id}", () => { });
     }
