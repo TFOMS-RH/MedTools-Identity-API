@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using System.Text.Json;
+﻿using System.Text.Json;
+using System.Globalization;
 
 using MedTools.Identity.API.Common.Models;
 using MedTools.Identity.API.Common.Models.Params;
@@ -10,7 +10,7 @@ namespace MedTools.Identity.API.Endpoints.Handlers.Users;
 public static class UpdateUserHandler
 {
     public static async Task<IResult> HandleAsync(
-        Guid userId,
+        Guid id,
         JsonElement request,
         UserRepository userRepository,
         CancellationToken cancellationToken)
@@ -42,7 +42,7 @@ public static class UpdateUserHandler
         }
 
         await userRepository.UpdateUserAsync(
-            userId,
+            id,
             updateParams,
             cancellationToken);
 
@@ -147,7 +147,7 @@ public static class UpdateUserHandler
                     if (emailValue.ValueKind is not (JsonValueKind.String or JsonValueKind.Null))
                     {
                         errors.Add(
-                            key: "emailValue",
+                            key: "email",
                             value: ["Поле emailValue должно быть представлено строкой или null."]);
 
                         break;

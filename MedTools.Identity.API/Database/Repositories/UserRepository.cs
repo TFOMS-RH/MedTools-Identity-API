@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 using MedTools.Identity.API.Database.Entities;
 using MedTools.Identity.API.Common.Models.Dtos;
-using MedTools.Identity.API.Common.Exceptions.Models;
 using MedTools.Identity.API.Common.Models.Params;
+using MedTools.Identity.API.Common.Exceptions.Models;
 
 namespace MedTools.Identity.API.Database.Repositories;
 
@@ -86,8 +86,8 @@ public sealed class UserRepository(
         var dbUser = await dbContext
             .Set<UserDbEntity>()
             .FindAsync(
-                [userId], 
-                cancellationToken: cancellationToken) 
+                [userId],
+                cancellationToken: cancellationToken)
             ?? throw new UserNotFoundException($"Пользователь с Id {userId} не был найден.");
 
         return new UserDto(
@@ -107,6 +107,41 @@ public sealed class UserRepository(
         UpdateUserParams updateParams,
         CancellationToken cancellationToken)
     {
+        var user = await dbContext
+            .Set<UserDbEntity>()
+            .FindAsync(keyValues: [userId], cancellationToken: cancellationToken)
+                ?? throw new UserNotFoundException($"Пользователь с Id {userId} не найден.");
 
+        if (updateParams.FirstName.IsSpecified)
+        {
+            user.FirstName = updateParams.FirstName.Value!;
+        }
+
+        if (updateParams.LastName.IsSpecified)
+        {
+            user.LastName = updateParams.LastName.Value!;
+        }
+
+        if (updateParams.MiddleName.IsSpecified)
+        {
+            user.MiddleName = updateParams.MiddleName.Value;
+        }
+
+        if (updateParams.ContactPhone.IsSpecified)
+        {
+            user.ContactPhone = updateParams.ContactPhone.Value;
+        }
+
+        if (updateParams.Email.IsSpecified)
+        {
+            user.Email = updateParams.Email.Value;
+        }
+
+        if (updateParams.BirthDate.IsSpecified)
+        {
+            user.BirthDate = updateParams.BirthDate.Value;
+        }
+
+        await dbContext.SaveChangesAsync(cancellationToken: cancellationToken);
     }
 }

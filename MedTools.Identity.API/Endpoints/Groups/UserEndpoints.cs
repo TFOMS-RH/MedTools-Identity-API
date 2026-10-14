@@ -12,7 +12,7 @@ public sealed class UserEndpoints : IEndpoint
         group.MapPost("/", CreateUserHandler.HandleAsync);
         group.MapGet("/", GetUsersHandler.HandleAsync);
         group.MapGet("/{id:guid}", GetUserByIdHandler.HandleAsync).WithName("GetUserById");
-        group.MapPatch("/{id}", () => { });
+        group.MapPatch("/{id:guid}", UpdateUserHandler.HandleAsync);
         group.MapPatch("/{id}/status", () => { });
 
     }
