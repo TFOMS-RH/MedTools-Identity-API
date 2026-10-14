@@ -67,6 +67,7 @@ public sealed class PermissionRepository(
         var permissions = await dbContext
             .Set<PermissionDbEntity>()
             .AsNoTracking()
+            .OrderBy(x => x.Code)
             .Select(x => new PermissionDto(
                 Id: x.Id,
                 Code: x.Code,
