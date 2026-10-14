@@ -23,6 +23,11 @@ public sealed class PermissionDbEntityConfiguration : IEntityTypeConfiguration<P
             .HasMaxLength(255)
             .IsRequired(true);
 
+        builder.Property(prop => prop.Description)
+            .HasColumnName("description")
+            .HasMaxLength(255)
+            .IsRequired(false);
+
         builder.HasIndex(permission => permission.Code).IsUnique();
     }
 }

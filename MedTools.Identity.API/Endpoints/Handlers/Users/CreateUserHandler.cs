@@ -1,5 +1,6 @@
-﻿using MedTools.Identity.API.Common.Models.Requests;
+﻿using MedTools.Identity.API.Common.Extenstions;
 using MedTools.Identity.API.Database.Repositories;
+using MedTools.Identity.API.Common.Models.Requests;
 
 namespace MedTools.Identity.API.Endpoints.Handlers.Users;
 
@@ -51,7 +52,9 @@ public static class CreateUserHandler
 
         if (string.IsNullOrWhiteSpace(request.UserName))
         {
-            AddError(errors, nameof(request.UserName), "Имя пользователя пустое либо содержит пустые пробелы.");
+            errors.AddError(
+                nameof(request.UserName), 
+                "Имя пользователя пустое либо содержит пустые пробелы.");
         }
 
         return errors.ToDictionary(
@@ -59,17 +62,5 @@ public static class CreateUserHandler
             x => x.Value.ToArray());
     }
 
-    private static void AddError(
-        Dictionary<string, List<string>> errors,
-        string field,
-        string message)
-    {
-        if (!errors.TryGetValue(field, out var messages))
-        {
-            messages = [];
-            errors[field] = messages;
-        }
-
-        messages.Add(message);
-    }
+    
 }

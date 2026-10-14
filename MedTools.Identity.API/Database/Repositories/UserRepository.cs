@@ -57,7 +57,7 @@ public sealed class UserRepository(
         catch (DbUpdateException ex)
             when (ex.InnerException is SqlException { Number: 2601 or 2627 })
         {
-            throw new DuplicateEntityException("Пользователь с таким именем или Email уже существует.", ex);
+            throw new DuplicateEntityException("Пользователь с таким именем уже существует.", ex);
         }
     }
 
