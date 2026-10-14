@@ -26,7 +26,7 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
 
             BadHttpRequestException ex => (
                 ex.StatusCode,
-                "Неккоректный запрос",
+                "Некорректный запрос",
                 ex.Message),
 
             _ => (

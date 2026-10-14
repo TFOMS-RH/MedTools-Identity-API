@@ -148,7 +148,7 @@ public static class UpdateUserHandler
                     {
                         errors.Add(
                             key: "email",
-                            value: ["Поле emailValue должно быть представлено строкой или null."]);
+                            value: ["Поле email должно быть представлено строкой или null."]);
 
                         break;
                     }
