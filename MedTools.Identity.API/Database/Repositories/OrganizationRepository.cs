@@ -66,4 +66,20 @@ public sealed class OrganizationRepository(IdentityDbContext dbContext)
                 Name: x.Name))
             .ToListAsync(cancellationToken: cancellationToken);
     }
+
+    public async Task<OrganizationDto> GetOrganizationByIdAsync(
+        Guid organizationId,
+        CancellationToken cancellationToken)
+    {
+        var organization = await dbContext
+            .Set<OrganizationDbEntity>()
+            .FindAsync([organizationId], cancellationToken: cancellationToken)
+                ?? throw new OrganizationNotFoundException($"Организации с Id {organizationId} не найдено.");
+
+        return new OrganizationDto(
+            Id: organization.Id,
+            Type: organization.Type,
+            Code: organization.Code,
+            Name: organization.Name);
+    }
 }

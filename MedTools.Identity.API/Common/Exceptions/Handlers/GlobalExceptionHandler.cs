@@ -24,6 +24,11 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
                 "Ресурс не найден",
                 exception.Message),
 
+            OrganizationNotFoundException => (
+                StatusCodes.Status404NotFound,
+                "Ресурс не найден",
+                exception.Message),
+
             BadHttpRequestException ex => (
                 ex.StatusCode,
                 "Некорректный запрос",

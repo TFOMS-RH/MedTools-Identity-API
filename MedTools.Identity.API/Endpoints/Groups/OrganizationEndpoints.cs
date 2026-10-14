@@ -11,7 +11,7 @@ public class OrganizationEndpoints : IEndpoint
 
         group.MapPost("/", CreateOrganizationHandler.HandleAsync);
         group.MapGet("/", GetOrganizationsHandler.HandleAsync);
-        group.MapGet("/{id:guid}", () => { }).WithName("GetOrganizationById");
+        group.MapGet("/{id:guid}", GetOrganizationByIdHandler.HandleAsync).WithName("GetOrganizationById");
         group.MapPatch("/", () => { });
     }
 }
