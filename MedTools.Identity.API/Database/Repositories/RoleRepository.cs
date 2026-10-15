@@ -78,7 +78,7 @@ public sealed class RoleRepository(IdentityDbContext dbContext)
             .Where(x => requestedPermissionIds.Contains(x.Id))
             .ToListAsync(cancellationToken: cancellationToken);
 
-        if(requestedPermissionIds.Count != filterPermissions.Count)
+        if (requestedPermissionIds.Count != filterPermissions.Count)
         {
             throw new EntityNotFoundException(
                 "Одно или более из переданных разрешений не существует в системе.");
@@ -91,14 +91,14 @@ public sealed class RoleRepository(IdentityDbContext dbContext)
         var idsToRemove = currentPermissionsIds.Except(requestedPermissionIds);
         var idsToAdd = requestedPermissionIds.Except(currentPermissionsIds);
 
-        foreach(var permission in role.Permissions
+        foreach (var permission in role.Permissions
             .Where(x => idsToRemove.Contains(x.Id))
             .ToList())
         {
             role.Permissions.Remove(permission);
         }
 
-        foreach(var permission in filterPermissions
+        foreach (var permission in filterPermissions
             .Where(x => idsToAdd.Contains(x.Id))
             .ToList())
         {
@@ -107,5 +107,26 @@ public sealed class RoleRepository(IdentityDbContext dbContext)
 
         await dbContext.SaveChangesAsync(cancellationToken: cancellationToken);
 
+    }
+
+    public async Task<IReadOnlyCollection<RoleDto>> GetRolesByUserIdAsync(
+        Guid userId,
+        CancellationToken cancellationToken)
+    {
+        var user = await dbContext
+            .Set<UserDbEntity>()
+            .Where(x => x.Id == userId)
+            .Select(x => new
+            {
+                Roles = x.Roles
+                    .Select(x => new RoleDto(
+                        Id: x.Id,
+                        Name: x.Name))
+                    .ToList()
+            })
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken)
+                ?? throw new EntityNotFoundException($"Пользователя с Id {userId} не найдено.");
+
+        return user.Roles;
     }
 }

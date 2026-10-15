@@ -14,5 +14,6 @@ public sealed class UserEndpoints : IEndpoint
         group.MapGet("/{id:guid}", GetUserByIdHandler.HandleAsync).WithName("GetUserById");
         group.MapPatch("/{id:guid}", UpdateUserHandler.HandleAsync);
         group.MapPatch("/{id:guid}/status", UpdateUserStatusHandler.HandleAsync);
+        group.MapGet("/{id:guid}/roles", GetUserRolesHandler.HandleAsync);
     }
 }
