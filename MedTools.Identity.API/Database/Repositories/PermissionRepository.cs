@@ -77,4 +77,27 @@ public sealed class PermissionRepository(
 
         return permissions;
     }
+
+    public async Task<IReadOnlyCollection<PermissionDto>> GetPermissionsByRoleId(
+        Guid roleId,
+        CancellationToken cancellationToken)
+    {
+        var role = await dbContext
+            .Set<RoleDbEntity>()
+            .Where(x => x.Id == roleId)
+            .Select(x => new
+            {
+                Permissions = x.Permissions
+                    .Select(x => new PermissionDto(
+                        Id: x.Id,
+                        Code: x.Code,
+                        Name: x.Name,
+                        Description: x.Description))
+                    .ToList()
+            })
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken)
+                ?? throw new EntityNotFoundException($"Роль с Id {roleId} не найдено.");
+
+        return role.Permissions;
+    }
 }

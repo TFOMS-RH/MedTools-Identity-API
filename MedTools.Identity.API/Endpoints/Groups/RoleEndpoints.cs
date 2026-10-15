@@ -12,7 +12,8 @@ public sealed class RoleEndpoints : IEndpoint
         group.MapPost("/", CreateRoleHandler.HandleAsync);
         group.MapGet("/", GetRolesHandler.HandleAsync);
         group.MapGet("/{id:guid}", GetRoleByIdHandler.HandleAsync).WithName("GetRoleById");
-        group.MapPatch("/{id}", () => { });
+        group.MapGet("/{id:guid}/permissions", GetPermissionsByRoleIdHandler.HandleAsync);
+        group.MapPut("/{id:guid}/permissions", UpdateRolePermissionsHandler.HandleAsync);
         group.MapDelete("/{id}", () => { });
     }
 }
