@@ -2,7 +2,7 @@
 
 namespace MedTools.Identity.API.Endpoints.Handlers.Roles;
 
-public static class GetPermissionsByRoleIdHandler
+public static class GetRolePermissionsHandler
 {
     public static async Task<IResult> HandleAsync(
         Guid id,

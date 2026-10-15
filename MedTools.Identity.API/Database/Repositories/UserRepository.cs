@@ -159,4 +159,51 @@ public sealed class UserRepository(
 
         await dbContext.SaveChangesAsync(cancellationToken: cancellationToken);
     }
+
+    public async Task UpdateUserRolesAsync(
+        Guid userId,
+        List<Guid> roleIds,
+        CancellationToken cancellationToken)
+    {
+        var user = await dbContext
+            .Set<UserDbEntity>()
+            .Where(x => x.Id == userId)
+            .Include(x => x.Roles)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken)
+                ?? throw new EntityNotFoundException($"Пользователь с Id {userId} не найден.");
+
+        var requestedIds = roleIds.ToHashSet();
+
+        var filterRoles = await dbContext
+            .Set<RoleDbEntity>()
+            .Where(x => requestedIds.Contains(x.Id))
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        if (requestedIds.Count != filterRoles.Count)
+        {
+            throw new EntityNotFoundException(
+                "Одна или более из переданных ролей отсутствуют в системе.");
+        }
+
+        var currentIds = user.Roles.Select(x => x.Id).ToList();
+
+        var idsToRemove = currentIds.Except(requestedIds);
+        var idsToAdd = requestedIds.Except(currentIds);
+
+        foreach (var role in user.Roles
+            .Where(x => idsToRemove.Contains(x.Id))
+            .ToList())
+        {
+            user.Roles.Remove(role);
+        }
+
+        foreach (var role in filterRoles
+            .Where(x => idsToAdd.Contains(x.Id))
+            .ToList())
+        {
+            user.Roles.Add(role);
+        }
+
+        await dbContext.SaveChangesAsync(cancellationToken: cancellationToken);
+    }
 }
