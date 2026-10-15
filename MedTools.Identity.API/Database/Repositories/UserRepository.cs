@@ -88,7 +88,7 @@ public sealed class UserRepository(
             .FindAsync(
                 [userId],
                 cancellationToken: cancellationToken)
-            ?? throw new EntityNotFoundException($"Пользователь с Id {userId} не был найден.");
+                    ?? throw new EntityNotFoundException($"Пользователь с Id {userId} не был найден.");
 
         return new UserDto(
             Id: dbUser.Id,

@@ -100,4 +100,30 @@ public sealed class PermissionRepository(
 
         return role.Permissions;
     }
+
+    public async Task<IReadOnlyCollection<string>> GetUserPermissionCodesAsync(
+        Guid userId,
+        CancellationToken cancellationToken)
+    {
+        var userExists = await dbContext
+            .Set<UserDbEntity>()
+            .AnyAsync(x => x.Id == userId, cancellationToken: cancellationToken);
+
+        if (!userExists)
+        {
+            throw new EntityNotFoundException(
+                $"Пользователь с Id {userId} не найден.");
+        }
+
+        var permissions = await dbContext
+            .Set<UserDbEntity>()
+            .Where(x => x.Id == userId)
+            .SelectMany(x => x.Roles)
+            .SelectMany(x => x.Permissions)
+            .Select(x => x.Code)
+            .Distinct()
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return permissions;
+    }
 }
