@@ -44,4 +44,17 @@ public sealed class RoleRepository(IdentityDbContext dbContext)
 
         return role;
     }
+
+    public async Task<IReadOnlyCollection<RoleDto>> GetRolesAsync(
+        CancellationToken cancellationToken)
+    {
+        var roles = await dbContext
+            .Set<RoleDbEntity>()
+            .Select(x => new RoleDto(
+                Id: x.Id,
+                Name: x.Name))
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return roles;
+    }
 }
