@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 using Serilog;
 
 using MedTools.Identity.API.Endpoints.Registration;
@@ -34,6 +36,7 @@ public class Program
         var app = builder.Build();
 
         app.UseExceptionHandler();
+        app.Services.GetRequiredService<RSA>();
 
         EndpointsProvider.RegisterApplicationEmdpoints(app.MapGroup("/api"));
 

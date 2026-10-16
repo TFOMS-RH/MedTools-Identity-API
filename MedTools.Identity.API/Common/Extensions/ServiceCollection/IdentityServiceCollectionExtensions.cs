@@ -1,8 +1,10 @@
 ﻿using System.Security.Cryptography;
 
 using Microsoft.AspNetCore.Identity;
-
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+
+using MedTools.Identity.API.Services;
 using MedTools.Identity.API.Common.Options;
 using MedTools.Identity.API.Database.Entities;
 
@@ -67,7 +69,18 @@ public static class IdentityServiceCollectionExtensions
             }
 
         });
+        services.AddSingleton<JwtTokenGenerationService>();
+        services.AddSingleton<SigningCredentials>((sp) =>
+        {
+            var rsa = sp.GetRequiredService<RSA>();
+            var securityKey = new RsaSecurityKey(rsa);
 
+            return new SigningCredentials(
+                key: securityKey,
+                algorithm: SecurityAlgorithms.RsaSha256);
+
+        });
+
+        services.AddScoped<AuthenticationService>();
     }
-
 }

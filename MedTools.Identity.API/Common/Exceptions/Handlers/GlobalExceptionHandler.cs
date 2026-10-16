@@ -29,6 +29,11 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
                 "Некорректный запрос",
                 ex.Message),
 
+            MedToolsAuthenticationFailedException => (
+                StatusCodes.Status401Unauthorized,
+                "Ошибка аутентификации",
+                "Неверное имя логина или пароль."),
+
             _ => (
                 StatusCodes.Status500InternalServerError,
                 "Внутренняя ошибка сервера",

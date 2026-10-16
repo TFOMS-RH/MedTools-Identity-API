@@ -79,6 +79,19 @@ public sealed class UserRepository(
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<UserDbEntity?> GetUserByUserNameAsync(
+        string userName,
+        CancellationToken cancellationToken)
+    {
+        var user = await dbContext
+            .Set<UserDbEntity>()
+            .Where(x => x.UserName == userName)
+            .Include(x => x.Organization)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+        return user;
+    }
+
     public async Task<UserDto> GetUserByIdAsync(
         Guid userId,
         CancellationToken cancellationToken)
