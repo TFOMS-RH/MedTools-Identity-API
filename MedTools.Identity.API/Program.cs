@@ -20,7 +20,7 @@ public class Program
         var builder = WebApplication.CreateBuilder();
 
         builder.Services.AddDatabaseServices(builder.Configuration);
-        builder.Services.AddMedToolsAuthorizationServices();
+        builder.Services.AddMedToolsAuthenticationServices();
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
         builder.Services.AddProblemDetails();
 

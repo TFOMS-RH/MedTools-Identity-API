@@ -7,5 +7,5 @@ public sealed class JwtOptions
     public string Issuer { get; set; } = string.Empty;
     public string Audience { get; set; } = string.Empty;
     public int AccessTokenExpirationTimeInMinutes { get; set; }
-    public string PrivateKeyRemFileName { get; set; } = string.Empty;
+    public string PrivateKeyPemFileName { get; set; } = string.Empty;
 }

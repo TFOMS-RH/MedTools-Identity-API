@@ -4,13 +4,14 @@ using MedTools.Identity.API.Database.Entities;
 
 namespace MedTools.Identity.API.Common.Extensions.ServiceCollection;
 
-public static class AuthorizationServiceCollectionExtensions
+public static class IdentityServiceCollectionExtensions
 {
-    public static IServiceCollection AddMedToolsAuthorizationServices(this IServiceCollection services)
+    public static IServiceCollection AddMedToolsAuthenticationServices(this IServiceCollection services)
     {
         services.AddScoped<IPasswordHasher<UserDbEntity>, PasswordHasher<UserDbEntity>>();
         
 
         return services;
     }
+
 }
