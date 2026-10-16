@@ -1,8 +1,8 @@
 using Serilog;
 
-using MedTools.Identity.API.DependencyInjections;
 using MedTools.Identity.API.Endpoints.Registration;
 using MedTools.Identity.API.Common.Exceptions.Handlers;
+using MedTools.Identity.API.Common.Extensions.ServiceCollection;
 
 namespace MedTools.Identity.API;
 
@@ -19,9 +19,8 @@ public class Program
 
         var builder = WebApplication.CreateBuilder();
 
-        builder.Services.AddDbContextConfiguration(builder.Configuration);
-        builder.Services.AddApplicationRepositories();
-        builder.Services.AddMedToolsIdentityServices();
+        builder.Services.AddDatabaseServices(builder.Configuration);
+        builder.Services.AddMedToolsAuthorizationServices();
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
         builder.Services.AddProblemDetails();
 

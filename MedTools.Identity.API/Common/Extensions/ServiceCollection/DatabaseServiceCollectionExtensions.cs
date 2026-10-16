@@ -1,21 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using MedTools.Identity.API.Database;
-using MedTools.Identity.API.Database.Repositories;
 using MedTools.Identity.API.Common.Options;
+using MedTools.Identity.API.Database.Repositories;
 
-namespace MedTools.Identity.API.DependencyInjections;
+namespace MedTools.Identity.API.Common.Extensions.ServiceCollection;
 
-public static class DbContextConfiguration
+public static class DatabaseServiceCollectionExtensions
 {
-    public static IServiceCollection AddDbContextConfiguration(
+    public static IServiceCollection AddDatabaseServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {
         DatabaseOption databaseOption = new();
 
-        configuration.GetSection(DatabaseOption.SectionName)
-            .Bind(databaseOption);
+        configuration.GetSection(DatabaseOption.SectionName).Bind(databaseOption);
 
         services.AddDbContext<IdentityDbContext>(options =>
         {
@@ -27,16 +26,11 @@ public static class DbContextConfiguration
                 });
         });
 
-        return services;
-    }
-
-    public static IServiceCollection AddApplicationRepositories(this IServiceCollection services)
-    {
-        services.AddScoped<UserRepository>();
         services.AddScoped<OrganizationRepository>();
         services.AddScoped<PermissionRepository>();
+        services.AddScoped<UserRepository>();
         services.AddScoped<RoleRepository>();
 
         return services;
-    }
+    } 
 }

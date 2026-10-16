@@ -1,4 +1,4 @@
-﻿namespace MedTools.Identity.API.Common.Extensions;
+﻿namespace MedTools.Identity.API.Common.Extensions.Collections;
 
 public static class ErrorDictionaryExtensions
 {
