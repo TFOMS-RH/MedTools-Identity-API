@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 using MedTools.Identity.API.Database;
 using MedTools.Identity.API.Common.Options;
@@ -12,25 +13,48 @@ public static class DatabaseServiceCollectionExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        DatabaseOption databaseOption = new();
+        ConfigureDatabaseOptions(services, configuration);
+        RegisterDbContext(services);
+        RegisterRepositories(services);
 
-        configuration.GetSection(DatabaseOption.SectionName).Bind(databaseOption);
+        return services;
+    }
 
-        services.AddDbContext<IdentityDbContext>(options =>
+    private static void ConfigureDatabaseOptions(
+        IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.AddOptions<DatabaseOption>()
+            .Bind(configuration.GetSection(DatabaseOption.SectionName))
+            .Validate(options =>
+                !string.IsNullOrWhiteSpace(options.ConnectionString) &&
+                options.CommandTimeout > 0)
+            .ValidateOnStart();
+    }
+
+    private static void RegisterDbContext(
+        IServiceCollection services)
+    {
+
+        services.AddDbContext<IdentityDbContext>((sp, dbContextOptionBuilder) =>
         {
-            options.UseSqlServer(
+            var databaseOption = sp.GetRequiredService<IOptions<DatabaseOption>>().Value;
+
+            dbContextOptionBuilder.UseSqlServer(
                 databaseOption.ConnectionString,
                 options =>
                 {
                     options.CommandTimeout(databaseOption.CommandTimeout);
                 });
         });
+    }
 
+    private static void RegisterRepositories(
+        IServiceCollection services)
+    {
         services.AddScoped<OrganizationRepository>();
         services.AddScoped<PermissionRepository>();
         services.AddScoped<UserRepository>();
         services.AddScoped<RoleRepository>();
-
-        return services;
-    } 
+    }
 }

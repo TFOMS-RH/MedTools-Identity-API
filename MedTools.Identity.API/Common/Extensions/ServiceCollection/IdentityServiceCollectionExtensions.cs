@@ -1,17 +1,73 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Security.Cryptography;
 
+using Microsoft.AspNetCore.Identity;
+
+using Microsoft.Extensions.Options;
+using MedTools.Identity.API.Common.Options;
 using MedTools.Identity.API.Database.Entities;
 
 namespace MedTools.Identity.API.Common.Extensions.ServiceCollection;
 
 public static class IdentityServiceCollectionExtensions
 {
-    public static IServiceCollection AddMedToolsAuthenticationServices(this IServiceCollection services)
+
+    public static IServiceCollection AddIdentityServices(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        services.AddScoped<IPasswordHasher<UserDbEntity>, PasswordHasher<UserDbEntity>>();
-        
+        AddMedToolsAuthenticationServices(services);
+        AddJwtConfigurationServices(services, configuration);
 
         return services;
+    }
+
+    private static void AddMedToolsAuthenticationServices(IServiceCollection services)
+    {
+        services.AddScoped<IPasswordHasher<UserDbEntity>, PasswordHasher<UserDbEntity>>();
+    }
+
+    private static void AddJwtConfigurationServices(
+        IServiceCollection services, 
+        IConfiguration configuration)
+    {
+
+        services.AddOptions<JwtOptions>()
+           .Bind(configuration.GetSection(JwtOptions.SectionName))
+           .Validate(options =>
+               !string.IsNullOrWhiteSpace(options.Issuer) &&
+               !string.IsNullOrWhiteSpace(options.Audience) &&
+               !string.IsNullOrWhiteSpace(options.PrivateKeyPemFileName) &&
+               options.AccessTokenExpirationTimeInMinutes > 0)
+           .ValidateOnStart();
+
+        services.AddSingleton<RSA>(sp =>
+        {
+
+            var jwtOptions = sp.GetRequiredService<IOptions<JwtOptions>>().Value;
+
+            var privateKeyPath = Path.Combine(
+                AppContext.BaseDirectory, 
+                jwtOptions.PrivateKeyPemFileName);
+
+            var privateKey = File.ReadAllText(privateKeyPath);
+
+            var rsa = RSA.Create();
+
+            try
+            {
+                rsa.ImportFromPem(privateKey);
+                rsa.ExportParameters(true);
+
+                return rsa;
+            }
+            catch
+            {
+                rsa.Dispose();
+                throw;
+            }
+
+        });
+
     }
 
 }
