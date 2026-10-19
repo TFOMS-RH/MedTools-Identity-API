@@ -16,7 +16,7 @@ public static class MedToolsIdentityPermissionCodes
 
     public const string CanReadRoles = "identity.roles.read";
     public const string CanCreateRoles = "identity.roles.create";
-    public const string CanUpdateRoles = "identity.roles.update";
+    public const string CanReadRolePermissions = "identity.roles.read_permissions";
     public const string CanManageRolePermissions = "identity.roles.permissions_manage";
 
     public const string CanReadPermissions = "identity.permissions.read";

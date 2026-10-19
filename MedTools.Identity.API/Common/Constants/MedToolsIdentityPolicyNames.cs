@@ -16,7 +16,7 @@ public static class MedToolsIdentityPolicyNames
 
     public const string CanReadRoles = MedToolsIdentityPermissionCodes.CanReadRoles;
     public const string CanCreateRoles = MedToolsIdentityPermissionCodes.CanCreateRoles;
-    public const string CanUpdateRoles = MedToolsIdentityPermissionCodes.CanUpdateRoles;
+    public const string CanReadRolePermissions = MedToolsIdentityPermissionCodes.CanReadRolePermissions;
     public const string CanManageRolePermissions = MedToolsIdentityPermissionCodes.CanManageRolePermissions;
 
     public const string CanReadPermissions = MedToolsIdentityPermissionCodes.CanReadPermissions;

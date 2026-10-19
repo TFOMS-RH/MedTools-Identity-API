@@ -28,10 +28,10 @@ public sealed class RoleEndpoints : IEndpoint
 
         group.MapGet("/{id:guid}/permissions", GetRolePermissionsHandler.HandleAsync)
             .WithName("GetRolePermissions")
-            .RequireAuthorization(MedToolsIdentityPolicyNames.CanManageRolePermissions);
+            .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadRolePermissions);
 
         group.MapPut("/{id:guid}/permissions", UpdateRolePermissionsHandler.HandleAsync)
             .WithName("UpdateRolePermissions")
-            .RequireAuthorization(MedToolsIdentityPolicyNames.CanUpdateRoles);
+            .RequireAuthorization(MedToolsIdentityPolicyNames.CanManageRolePermissions);
     }
 }

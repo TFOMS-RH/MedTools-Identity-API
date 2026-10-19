@@ -43,6 +43,6 @@ public sealed class UserEndpoints : IEndpoint
 
         group.MapGet("/{id:guid}/permission-codes", GetUserPermissionCodesHandler.HandleAsync)
             .WithName("GetPermissionCodes")
-            .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadUsers);
+            .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadUserPermissions);
     }
 }
