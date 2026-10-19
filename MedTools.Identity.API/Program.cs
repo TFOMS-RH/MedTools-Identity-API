@@ -2,9 +2,9 @@ using System.Security.Cryptography;
 
 using Serilog;
 
-using MedTools.Identity.API.Endpoints.Registration;
 using MedTools.Identity.API.Common.Exceptions.Handlers;
 using MedTools.Identity.API.Common.Extensions.ServiceCollection;
+using MedTools.Identity.API.Endpoints.Groups;
 
 namespace MedTools.Identity.API;
 
@@ -38,23 +38,8 @@ public class Program
         app.UseExceptionHandler();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.MapGroup("/api").RegisterIdentityEndpoints();
         app.Services.GetRequiredService<RSA>();
-
-        app.MapGet("/debug/claims", (HttpContext context) =>
-        {
-            return Results.Ok(new
-            {
-                IsAuthenticated = context.User.Identity?.IsAuthenticated,
-                Claims = context.User.Claims.Select(claim => new
-                {
-                    claim.Type,
-                    claim.Value
-                })
-            });
-        })
-        .RequireAuthorization();
-
-        EndpointsProvider.RegisterApplicationEmdpoints(app.MapGroup("/api"));
 
         await app.RunAsync();
     }
