@@ -36,7 +36,23 @@ public class Program
         var app = builder.Build();
 
         app.UseExceptionHandler();
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.Services.GetRequiredService<RSA>();
+
+        app.MapGet("/debug/claims", (HttpContext context) =>
+        {
+            return Results.Ok(new
+            {
+                IsAuthenticated = context.User.Identity?.IsAuthenticated,
+                Claims = context.User.Claims.Select(claim => new
+                {
+                    claim.Type,
+                    claim.Value
+                })
+            });
+        })
+        .RequireAuthorization();
 
         EndpointsProvider.RegisterApplicationEmdpoints(app.MapGroup("/api"));
 
