@@ -86,8 +86,6 @@ public static class IdentityServiceCollectionExtensions
         });
 
         services.AddScoped<AuthenticationService>();
-
-
     }
 
     private static void ConfigureJwtAuthentication(
@@ -127,7 +125,6 @@ public static class IdentityServiceCollectionExtensions
                     ClockSkew = TimeSpan.FromSeconds(30)
                 };
             });
-
     }
 
     private static void ConfigureAuthorizationPolicies(
@@ -244,15 +241,6 @@ public static class IdentityServiceCollectionExtensions
                         MedToolsIdentityPermissionCodes.CanCreateRoles);
                 })
             .AddPolicy(
-                MedToolsIdentityPolicyNames.CanUpdateRoles,
-                policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireClaim(
-                        "permission",
-                        MedToolsIdentityPermissionCodes.CanUpdateRoles);
-                })
-            .AddPolicy(
                 MedToolsIdentityPolicyNames.CanManageRolePermissions,
                 policy =>
                 {
@@ -269,6 +257,24 @@ public static class IdentityServiceCollectionExtensions
                     policy.RequireClaim(
                         "permission",
                         MedToolsIdentityPermissionCodes.CanReadPermissions);
+                })
+            .AddPolicy(
+                MedToolsIdentityPolicyNames.CanReadRolePermissions,
+                policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim(
+                        "permission",
+                        MedToolsIdentityPermissionCodes.CanReadRolePermissions);
+                })
+            .AddPolicy(
+                MedToolsIdentityPolicyNames.CanCreatePermissions,
+                policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim(
+                        "permission",
+                        MedToolsIdentityPermissionCodes.CanCreatePermissions);
                 });
     }
 }
