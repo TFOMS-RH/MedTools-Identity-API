@@ -65,6 +65,11 @@ namespace MedTools.Identity.API.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("code");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("description");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)

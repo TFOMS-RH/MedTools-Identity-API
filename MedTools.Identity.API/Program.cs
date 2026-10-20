@@ -1,7 +1,10 @@
+using System.Security.Cryptography;
+
 using Serilog;
 
-using MedTools.Identity.API.DependencyInjections;
-using MedTools.Identity.API.Endpoints.Registration;
+using MedTools.Identity.API.Endpoints.Groups;
+using MedTools.Identity.API.Common.Exceptions.Handlers;
+using MedTools.Identity.API.Common.Extensions.ServiceCollection;
 
 namespace MedTools.Identity.API;
 
@@ -18,19 +21,26 @@ public class Program
 
         var builder = WebApplication.CreateBuilder();
 
-        builder.Services.AddDbContextConfiguration(builder.Configuration);
-        builder.Services.AddMedToolsIdentityServices();
+        builder.Services.AddDatabaseServices(builder.Configuration);
+        builder.Services.AddIdentityServices(builder.Configuration);
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddProblemDetails();
 
         builder.Host.UseSerilog();
 
-        builder.WebHost.ConfigureKestrel(options =>
-        {
-            options.ListenAnyIP(8007);
-        });
+        builder.WebHost.ConfigureKestrel(
+            options =>
+            {
+                options.ListenAnyIP(8007);
+            });
 
         var app = builder.Build();
 
-        EndpointsProvider.RegisterApplicationEmdpoints(app.MapGroup("/api"));
+        app.UseExceptionHandler();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.MapGroup("/api").RegisterIdentityEndpoints();
+        app.Services.GetRequiredService<RSA>();
 
         await app.RunAsync();
     }

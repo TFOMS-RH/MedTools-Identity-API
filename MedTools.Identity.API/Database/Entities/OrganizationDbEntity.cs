@@ -1,4 +1,4 @@
-﻿using MedTools.Identity.API.Enums;
+﻿using MedTools.Identity.API.Common.Enums;
 
 namespace MedTools.Identity.API.Database.Entities;
 
