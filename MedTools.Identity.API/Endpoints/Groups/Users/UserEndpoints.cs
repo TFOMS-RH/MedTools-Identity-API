@@ -7,7 +7,9 @@ public static class UserEndpoints
     public static RouteGroupBuilder RegisterUserEndpoints(
         this RouteGroupBuilder routeGroupBuilder)
     {
-        routeGroupBuilder.MapGet("/me", GetCurrentUserHandler.HandleAsync)
+        routeGroupBuilder.MapGet(
+                pattern: "/me", 
+                handler: GetCurrentUserHandler.HandleAsync)
             .WithName("GetCurrentUser")
             .RequireAuthorization();
 

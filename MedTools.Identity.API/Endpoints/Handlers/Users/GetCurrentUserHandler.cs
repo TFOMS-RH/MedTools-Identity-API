@@ -23,11 +23,6 @@ public static class GetCurrentUserHandler
             userId: userId,
             cancellationToken: cancellationToken);
 
-        if (user is null)
-        {
-            return Results.Unauthorized();
-        }
-
         return Results.Ok(user);
     }
 }

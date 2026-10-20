@@ -8,27 +8,41 @@ public static class RoleEndpoints
     public static RouteGroupBuilder RegisterRoleEndpoints(
         this RouteGroupBuilder routeGroupBuilder)
     {
-        routeGroupBuilder.MapPost("/roles", CreateRoleHandler.HandleAsync)
+        var group = routeGroupBuilder
+            .MapGroup("/roles")
+            .WithTags("Roles");
+
+        group.MapPost(
+                pattern: "/",
+                handler: CreateRoleHandler.HandleAsync)
             .WithName("CreateRole")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanCreateRoles);
 
-        routeGroupBuilder.MapGet("/roles", GetRolesHandler.HandleAsync)
+        group.MapGet(
+                pattern: "/",
+                handler: GetRolesHandler.HandleAsync)
             .WithName("GetRoles")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadRoles);
 
-        routeGroupBuilder.MapGet("/roles/{id:guid}", GetRoleByIdHandler.HandleAsync)
+        group.MapGet(
+                pattern: "/{id:guid}",
+                handler: GetRoleByIdHandler.HandleAsync)
             .WithName("GetRoleById")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadRoles);
 
-        routeGroupBuilder.MapGet("/roles/{id:guid}/permissions", GetRolePermissionsHandler.HandleAsync)
+        group.MapGet(
+                pattern: "/{id:guid}/permissions",
+                handler: GetRolePermissionsHandler.HandleAsync)
             .WithName("GetRolePermissions")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadRolePermissions);
 
-        routeGroupBuilder.MapPut("/roles/{id:guid}/permissions", UpdateRolePermissionsHandler.HandleAsync)
+        group.MapPut(
+                pattern: "/{id:guid}/permissions",
+                handler: UpdateRolePermissionsHandler.HandleAsync)
             .WithName("UpdateRolePermissions")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanManageRolePermissions);
 
-        return routeGroupBuilder;
+        return group;
 
     }
 }

@@ -2,9 +2,9 @@ using System.Security.Cryptography;
 
 using Serilog;
 
+using MedTools.Identity.API.Endpoints.Groups;
 using MedTools.Identity.API.Common.Exceptions.Handlers;
 using MedTools.Identity.API.Common.Extensions.ServiceCollection;
-using MedTools.Identity.API.Endpoints.Groups;
 
 namespace MedTools.Identity.API;
 
@@ -28,10 +28,11 @@ public class Program
 
         builder.Host.UseSerilog();
 
-        builder.WebHost.ConfigureKestrel(options =>
-        {
-            options.ListenAnyIP(8007);
-        });
+        builder.WebHost.ConfigureKestrel(
+            options =>
+            {
+                options.ListenAnyIP(8007);
+            });
 
         var app = builder.Build();
 

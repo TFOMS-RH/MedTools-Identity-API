@@ -8,18 +8,29 @@ public static class PermissionEndpoints
     public static RouteGroupBuilder RegisterPermissionEndpoints(
         this RouteGroupBuilder routeGroupBuilder)
     {
-        routeGroupBuilder.MapPost("/permissions", CreatePermissionHandler.HandleAsync)
+        var group = routeGroupBuilder
+            .MapGroup("/permissions")
+            .WithTags("Permissions");
+
+        group.MapPost(
+                pattern: "/",
+                handler: CreatePermissionHandler.HandleAsync)
             .WithName("CreatePermission")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanCreatePermissions);
 
-        routeGroupBuilder.MapGet("/permissions", GetPermissionsHandler.HandleAsync)
+        group.MapGet(
+                pattern: "/",
+                handler: GetPermissionsHandler.HandleAsync)
             .WithName("GetPermissions")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadPermissions);
 
-        routeGroupBuilder.MapGet("/permissions/{id:guid}", GetPermissionByIdHandler.HandleAsync)
+        group.MapGet(
+                pattern: "/{id:guid}",
+                handler: GetPermissionByIdHandler.HandleAsync)
             .WithName("GetPermissionById")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadPermissions);
 
-        return routeGroupBuilder;
+        return group;
+
     }
 }

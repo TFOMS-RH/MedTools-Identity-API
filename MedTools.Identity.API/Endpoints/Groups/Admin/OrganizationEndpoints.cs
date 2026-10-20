@@ -8,18 +8,28 @@ public static class OrganizationEndpoints
     public static RouteGroupBuilder RegisterOrganizationEndpoints(
         this RouteGroupBuilder routeGroupBuilder)
     {
-        routeGroupBuilder.MapPost("/organizations", CreateOrganizationHandler.HandleAsync)
+        var group = routeGroupBuilder
+            .MapGroup("/organizations")
+            .WithTags("Organizations");
+
+        group.MapPost(
+                pattern: "/",
+                handler: CreateOrganizationHandler.HandleAsync)
             .WithName("CreateOrganziation")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanCreateOrganizations);
 
-        routeGroupBuilder.MapGet("/organizations", GetOrganizationsHandler.HandleAsync)
+        group.MapGet(
+                pattern: "/",
+                handler: GetOrganizationsHandler.HandleAsync)
             .WithName("GetOrganizations")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadOrganizations);
 
-        routeGroupBuilder.MapGet("/organizations/{id:guid}", GetOrganizationByIdHandler.HandleAsync)
+        group.MapGet(
+                pattern: "/{id:guid}",
+                handler: GetOrganizationByIdHandler.HandleAsync)
             .WithName("GetOrganizationById")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadOrganizations);
 
-        return routeGroupBuilder;
+        return group;
     }
 }

@@ -8,38 +8,59 @@ public static class UserManagementEndpoints
     public static RouteGroupBuilder RegisterUserManagementEndpoints(
         this RouteGroupBuilder routeGroupBuilder)
     {
-        routeGroupBuilder.MapGet("/users", GetUsersHandler.HandleAsync)
+
+        var group = routeGroupBuilder
+            .MapGroup("/users")
+            .WithTags("Users");
+
+        group.MapGet(
+                pattern: "/",
+                handler: GetUsersHandler.HandleAsync)
             .WithName("GetUsersList")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadUsers);
 
-        routeGroupBuilder.MapPost("/users", CreateUserHandler.HandleAsync)
+        group.MapPost(
+                pattern: "/",
+                handler: CreateUserHandler.HandleAsync)
             .WithName("CreateUser")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanCreateUsers);
 
-        routeGroupBuilder.MapGet("/users/{id:guid}", GetUserByIdHandler.HandleAsync)
+        group.MapGet(
+                pattern: "/{id:guid}",
+                handler: GetUserByIdHandler.HandleAsync)
             .WithName("GetUserById")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadUsers);
 
-        routeGroupBuilder.MapPatch("/users/{id:guid}", UpdateUserHandler.HandleAsync)
+        group.MapPatch(
+                pattern: "/{id:guid}",
+                handler: UpdateUserHandler.HandleAsync)
             .WithName("UpdateUser")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanUpdateUsers);
 
-        routeGroupBuilder.MapPatch("/users/{id:guid}/status", UpdateUserStatusHandler.HandleAsync)
+        group.MapPatch(
+                pattern: "/{id:guid}/status", 
+                handler: UpdateUserStatusHandler.HandleAsync)
             .WithName("UpdateUserStatus")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanUpdateUserStatus);
 
-        routeGroupBuilder.MapGet("/users/{id:guid}/roles", GetUserRolesHandler.HandleAsync)
+        group.MapGet(
+                pattern: "/{id:guid}/roles", 
+                handler: GetUserRolesHandler.HandleAsync)
             .WithName("GetUserRoles")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadUserRoles);
 
-        routeGroupBuilder.MapPut("/users/{id:guid}/roles", UpdateUserRolesHandler.HandleAsync)
+        group.MapPut(
+                pattern: "/{id:guid}/roles", 
+                handler: UpdateUserRolesHandler.HandleAsync)
             .WithName("AddUserRoles")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanManageUserRoles);
 
-        routeGroupBuilder.MapGet("/users/{id:guid}/permission-codes", GetUserPermissionCodesHandler.HandleAsync)
+        group.MapGet(
+                pattern: "/{id:guid}/permission-codes", 
+                handler: GetUserPermissionCodesHandler.HandleAsync)
             .WithName("GetPermissionCodes")
             .RequireAuthorization(MedToolsIdentityPolicyNames.CanReadUserPermissions);
 
-        return routeGroupBuilder;
+        return group;
     }
 }
