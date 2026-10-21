@@ -25,6 +25,7 @@ public class Program
         builder.Services.AddIdentityServices(builder.Configuration);
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
         builder.Services.AddProblemDetails();
+        builder.Services.AddWindowsService();
 
         builder.Host.UseSerilog();
 
@@ -32,6 +33,7 @@ public class Program
             options =>
             {
                 options.ListenAnyIP(8007);
+                options.AddServerHeader = false;
             });
 
         var app = builder.Build();
@@ -40,6 +42,7 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapGroup("/api").RegisterIdentityEndpoints();
+
         app.Services.GetRequiredService<RSA>();
 
         await app.RunAsync();

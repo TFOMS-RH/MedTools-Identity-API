@@ -428,3 +428,4 @@ FodyWeavers.xsd
 #*.lscache
 
 /MedTools.Identity.API/appsettings*.json
+/builds

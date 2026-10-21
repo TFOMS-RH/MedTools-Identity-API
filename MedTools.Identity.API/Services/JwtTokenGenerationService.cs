@@ -24,6 +24,7 @@ public sealed class JwtTokenGenerationService(
             new("first_name", user.FirstName),
             new("last_name", user.LastName),
             new("organization_id", user.OrganizationId.ToString()),
+            new("organization_code", user.Organization.Code),
             new("organization_type", user.Organization.Type.ToString())
         };
 
@@ -31,13 +32,13 @@ public sealed class JwtTokenGenerationService(
         {
             claims.Add(
                 new(
-                    JwtRegisteredClaimNames.Email, 
+                    JwtRegisteredClaimNames.Email,
                     user.Email));
         }
 
         claims.AddRange([.. permissions.Select(
             permission => new Claim(
-                "permission", 
+                "permission",
                 permission))]);
 
         var now = DateTime.UtcNow;
